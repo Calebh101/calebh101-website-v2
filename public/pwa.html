@@ -192,28 +192,28 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-          const closePopup = document.getElementById("closePopup");
-          const dismissPopup = document.getElementById("dismissPopup");
-          const popupOverlay = document.getElementById("popupOverlay");
+        const closePopup = document.getElementById("closePopup");
+        const dismissPopup = document.getElementById("dismissPopup");
+        const popupOverlay = document.getElementById("popupOverlay");
 
-          // Hide popup
-          const hidePopup = () => {
-            popupOverlay.classList.remove("visible");
-          };
+        // Hide popup
+        const hidePopup = () => {
+          popupOverlay.classList.remove("visible");
+        };
 
-          closePopup.addEventListener("click", hidePopup);
-          dismissPopup.addEventListener("click", hidePopup);
+        closePopup.addEventListener("click", hidePopup);
+        dismissPopup.addEventListener("click", hidePopup);
 
-          // Hide popup on clicking outside of it
-          popupOverlay.addEventListener("click", (e) => {
-            if (e.target === popupOverlay) {
-              hidePopup();
-            }
-          });
+        // Hide popup on clicking outside of it
+        popupOverlay.addEventListener("click", (e) => {
+          if (e.target === popupOverlay) {
+            hidePopup();
+          }
+        });
 
-          var installDialogue = `To install this website as an app, you will first need to share the website to your home screen. On mobile, click the share button or icon, and press "Add to Home Screen". Follow the steps and continue. If you are on desktop, then sharing will vary by browser, but you want to look for something like "Install as App" or "Add to Dock".`;
+        var installDialogue = `To install this website as an app, you will first need to share the website to your home screen. On mobile, click the share button or icon, and press "Add to Home Screen". Follow the steps and continue. If you are on desktop, then sharing will vary by browser, but you want to look for something like "Install as App" or "Add to Dock".`;
 
-          document.getElementById("installDialogue").innerHTML = installDialogue;
+        document.getElementById("installDialogue").innerHTML = installDialogue;
       });
 
       function isPWA() {
