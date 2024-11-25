@@ -51,7 +51,7 @@
         font-family: 'Poppins', sans-serif;
       }
 
-      button:hover {
+      button:hover:not(.cupertino-design) {
         transform: scale(1.1);
       }
 
@@ -62,7 +62,7 @@
         border-radius: 15px;
       }
 
-      #install {
+      #install.web-design {
         width: 150px;
         height: 75px;
         font-size: 20px;
@@ -71,8 +71,37 @@
         box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5);
       }
 
+      #install.cupertino-design {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 20px;
+        font-size: 16px;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: white;
+        border-radius: 12px;
+        border: none;
+        cursor: pointer;
+        background-color: gray;
+        box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5);
+        transition: background-color 0.3s ease, transform 0.3s ease;
+      }
+
+      #install.cupertino-design:hover {
+        transform: translateY(-2px);
+      }
+
+      #install.cupertino-design:active {
+        transform: translateY(0);
+      }
+
+      #install.cupertino-design .icon {
+        margin-right: 8px;
+      }
+
       .installable {
-        background-color: blue !important;
+        background-color: #007aff !important;
       }
 
       #popupOverlay {
@@ -136,7 +165,7 @@
           text-decoration: underline;
         }
 
-        #install {
+        button {
           border: 2px solid var(--text-dark);
         }
       }
@@ -149,7 +178,7 @@
       <h2 id="url" style="margin-top: 0px;">Loading...</h2>
       <p id="desc">Loading...</p>
       <br>
-      <button id="install" onclick="install();">Install</button>
+      <button id="install" class="cupertino-design" onclick="install();">Install</button>
     </div>
 
     <!-- I used ChatGPT for the entire popup animation and box, I'm just gonna admit it up front -->
@@ -258,7 +287,6 @@
 
       if (!isPWA()) {
         console.log("PWA ready");
-        //debugger;
 
         var manifestLink = document.createElement('link');
         manifestLink.rel = 'manifest';
