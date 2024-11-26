@@ -1,6 +1,7 @@
 <html>
   <head>
     <title>PWAmaker PWA Loader</title>
+    <link rel="icon" href="/icons/pwamaker/large-transparent.png" type="image/png">
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -11,12 +12,11 @@
 
     <style>
       :root {
+        --theme-color: #ff6600
         --bg-light: #ffffff;
         --bg-dark: #1f1f1f;
         --text-light: #141414;
         --text-dark: #ffffff;
-        --link-light: #ff6600;
-        --link-dark: #ff6600;
         --popup-transition: 0.2s;
       }
 
@@ -35,7 +35,7 @@
 
       /* Style links */
       a {
-        color: var(--link-light);
+        color: var(--theme-color);
         text-decoration: none;
       }
 
@@ -152,7 +152,6 @@
           cursor: pointer;
       }
 
-      /* Dark mode styles */
       @media (prefers-color-scheme: dark) {
         body {
           background-color: var(--bg-dark);
@@ -160,7 +159,7 @@
         }
 
         a {
-          color: var(--link-dark);
+          color: var(--theme-color);
         }
 
         a:hover {
