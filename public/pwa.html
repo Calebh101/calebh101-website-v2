@@ -152,6 +152,19 @@
           cursor: pointer;
       }
 
+      .clickable_icon {
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+      }
+
+      .clickable_icon:hover {
+        transform: translateY(-3px);
+      }
+
+      .clickable_icon:active {
+        transform: translateY(0) !important;
+      }
+
       @media (prefers-color-scheme: dark) {
         body {
           background-color: var(--bg-dark);
@@ -174,6 +187,7 @@
   </head>
   <body>
     <div style="margin: auto; text-align: center; margin-top: 25px;">
+      <!--<image onclick="selectIcon()" id="icon" class="clickable_icon" src="/icons/placeholder/more_horiz.png"></image>-->
       <image id="icon" src="/icons/placeholder/more_horiz.png"></image>
       <h1 id="title" style="margin-bottom: 0px;">Loading...</h1>
       <h2 id="url" style="margin-top: 0px;">Loading...</h2>
@@ -217,89 +231,106 @@
         document.getElementById("installDialogue").innerHTML = installDialogue;
       });
 
+      function selectIcon() {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = '.jpg,.png';
+
+        fileInput.addEventListener('change', (event) => {
+          const files = event.target.files;
+          const utf8Encoded = new TextEncoder().encode(files);
+          const base64Encoded = btoa(String.fromCharCode(...utf8Encoded));
+          start(base64Encoded, true);
+        });
+
+        fileInput.click();
+      }
+
       function isPWA() {
         return window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
       }
 
-      async function encodeImageToBase64(imagePath) {
-        try {
-          const response = await fetch(imagePath);
-          if (!response.ok) throw new Error('Failed to fetch the image');
-          const blob = await response.blob();
+      async function start(overwrite) {
+        var defaultData = {
+          "name": "Calebh101",
+          "desc": "Calebh101 website",
+          "url": "https://calebh101studios.web.app",
+          "icon": "/icons/pwamaker/small-full.png",
+        };
 
-          return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onloadend = () => resolve(reader.result);
-            reader.onerror = reject;
-            reader.readAsDataURL(blob);
-          });
+        var installable = false;
+        const params = new URLSearchParams(window.location.search);
+        var data;
+
+        try {
+          const dataParam = params.get("data");
+          data = dataParam ? JSON.parse(dataParam) : defaultData;
         } catch (error) {
-          console.error("Error encoding image to Base64:", error);
+          console.error("Error parsing data: " + error);
+          data = defaultData;
+        }
+
+        data.name ??= defaultData.name;
+        data.desc ??= defaultData.desc;
+        data.icon ??= defaultdata.icon;
+
+        var iconData = await getData(data.icon);
+        var iconUrl = "data:image/png;base64," + iconData;
+        console.log("icon URL: " + iconUrl);
+
+        if (isPWA()) {
+          console.log("Loading PWA with " + JSON.stringify(data));
+          debugger;
+          window.location.href = data.url;
+        } else {
+          console.log("Loaded data with: " + JSON.stringify(data));
+        }
+
+        var manifest = {
+          name: data.name,
+          short_name: data.name,
+          description: data.desc,
+          display: "standalone",
+          background_color: "#ffffff",
+          theme_color: "#000000",
+          icons: [
+            {
+              src: iconUrl,
+              type: "image/png",
+              sizes: "1024x1024"
+            },
+          ]
+        };
+
+        if (!isPWA()) {
+          console.log("PWA ready");
+
+          var manifestLink = document.createElement('link');
+          manifestLink.rel = 'manifest';
+          manifestLink.href = 'data:application/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(manifest));
+          document.head.appendChild(manifestLink);
+
+          document.getElementById("title").innerHTML = data.name;
+          document.getElementById("url").innerHTML = "<a target='_blank' href='" + data.url + "'>" + data.url + "</a>";
+          document.getElementById("desc").innerHTML = data.desc;
+          document.getElementById("icon").src = iconUrl;
+          document.getElementById("install").classList.add("installable");
+
+          installable = true;
         }
       }
 
-      var defaultData = {
-        "name": "Calebh101",
-        "desc": "Calebh101 website",
-        "url": "https://calebh101studios.web.app",
-      };
-
-      var installable = false;
-      const params = new URLSearchParams(window.location.search);
-      var data;
-      var iconParam = decodeURIComponent(params.get("icon"));
-
-      try {
-        const dataParam = params.get("data");
-        data = dataParam ? JSON.parse(decodeURIComponent(dataParam)) : defaultData;
-      } catch (error) {
-        console.error("Error parsing data: " + error);
-        data = defaultData;
-      }
-
-      data.name ??= defaultData.name;
-      data.desc ??= defaultData.desc;
-      data.icon = params.get("icon") ? "data:image/png;base64," + iconParam : "/icons/pwamaker/small-full.png";
-
-      if (isPWA()) {
-        console.log("Loading PWA with " + JSON.stringify(data));
-        debugger;
-        window.location.href = data.url;
-      } else {
-        console.log("Loaded data with: " + JSON.stringify(data));
-      }
-
-      var manifest = {
-        name: data.name,
-        short_name: data.name,
-        description: data.desc,
-        display: "standalone",
-        background_color: "#ffffff",
-        theme_color: "#000000",
-        icons: [
-          {
-            src: data.icon,
-            type: "image/png",
-            sizes: "1024x1024"
-          },
-        ]
-      };
-
-      if (!isPWA()) {
-        console.log("PWA ready");
-
-        var manifestLink = document.createElement('link');
-        manifestLink.rel = 'manifest';
-        manifestLink.href = 'data:application/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(manifest));
-        document.head.appendChild(manifestLink);
-
-        document.getElementById("title").innerHTML = data.name;
-        document.getElementById("url").innerHTML = "<a target='_blank' href='" + data.url + "'>" + data.url + "</a>";
-        document.getElementById("desc").innerHTML = data.desc;
-        document.getElementById("icon").src = data.icon;
-        document.getElementById("install").classList.add("installable");
-
-        installable = true;
+      async function getData(url) {
+        try {
+          const response = await fetch(url);
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const data = await response.text();
+          return data;
+        } catch (error) {
+          throw new Error('There was a problem with the fetch operation:', error);
+        }
       }
 
       function install() {
@@ -308,6 +339,9 @@
           popupOverlay.classList.add("visible");
         }
       }
+
+      const params = new URLSearchParams(window.location.search);
+      start(false);
     </script>
   </body>
 </html>
