@@ -282,8 +282,6 @@
         data.desc ??= defaultData.desc;
         data.icon ??= defaultdata.icon;
 
-        var iconData = await getData(data.icon);
-        var iconUrl = "data:image/png;base64," + iconData;
         console.log("icon URL: " + iconUrl);
 
         if (isPWA()) {
@@ -303,7 +301,7 @@
           theme_color: "#000000",
           icons: [
             {
-              src: iconUrl,
+              src: data.icon,
               type: "image/png",
               sizes: "1024x1024"
             },
@@ -321,7 +319,7 @@
           document.getElementById("title").innerHTML = data.name;
           document.getElementById("url").innerHTML = "<a target='_blank' href='" + data.url + "'>" + data.url + "</a>";
           document.getElementById("desc").innerHTML = data.desc;
-          document.getElementById("icon").src = iconUrl;
+          document.getElementById("icon").src = data.icon;
           document.getElementById("install").classList.add("installable");
 
           installable = true;
