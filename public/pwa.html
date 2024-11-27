@@ -2,6 +2,10 @@
   <head>
     <title>PWAmaker PWA Loader</title>
     <link rel="icon" href="/icons/pwamaker/large-transparent.png" type="image/png">
+
+    <script>
+      console.log("PWA.HTML");
+    </script>
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -206,6 +210,8 @@
     </div>
 
     <script>
+      console.log("starting pwa.html initialization");
+
       document.addEventListener("DOMContentLoaded", () => {
         const closePopup = document.getElementById("closePopup");
         const dismissPopup = document.getElementById("dismissPopup");
@@ -251,6 +257,8 @@
       }
 
       async function start(overwrite) {
+        console.log("starting (" + overwrite + ")")
+
         var defaultData = {
           "name": "Calebh101",
           "desc": "Calebh101 website",
