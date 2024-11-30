@@ -18,7 +18,7 @@
       :root {
         --theme-color: #ff6600
         --bg-light: #ffffff;
-        --bg-dark: #1f1f1f;
+        --bg-dark: hsl(0, 0%, 12%);
         --text-light: #141414;
         --text-dark: #ffffff;
         --popup-transition: 0.2s;
@@ -282,7 +282,7 @@
         data.desc ??= defaultData.desc;
         data.icon ??= defaultdata.icon;
 
-        console.log("icon URL: " + iconUrl);
+        console.log("icon URL: " + data.icon);
 
         if (isPWA()) {
           console.log("Loading PWA with " + JSON.stringify(data));
