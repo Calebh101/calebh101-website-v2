@@ -8,7 +8,7 @@
  */
 
 // Sensitive data
-import { config } from './private';
+const { config } = require('./private');
 
 const {onRequest} = require("firebase-functions/v2/https");
 const logger = require("firebase-functions/logger");
